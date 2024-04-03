@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' show Platform;
@@ -11,12 +10,11 @@ class FlutterRtmpCameraPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return StreamBuilder<StreamingState>(
         stream: controller.stateStream,
         initialData: controller.state,
         builder: (context, snapshot) {
-          if (snapshot.hasError){
+          if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -24,8 +22,7 @@ class FlutterRtmpCameraPreview extends StatelessWidget {
           }
 
           return _FlutterRtmpCameraPreview(key: key, state: snapshot.data!);
-        }
-    );
+        });
   }
 }
 
@@ -35,11 +32,7 @@ class _FlutterRtmpCameraPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return AspectRatio(
-        aspectRatio: state.aspectRatio,
-        child: const FlutterRtmpCameraView()
-    );
+    return AspectRatio(aspectRatio: state.aspectRatio, child: const FlutterRtmpCameraView());
   }
 }
 
@@ -51,21 +44,15 @@ class FlutterRtmpCameraView extends StatelessWidget {
     if (Platform.isAndroid) {
       return AndroidView(
         key: key,
-
         viewType: 'flutter_rtmp_streamer_camera_view',
         onPlatformViewCreated: (id) {
           debugPrint("_onPlatformViewCreated $id");
         },
         creationParamsCodec: const StandardMessageCodec(),
       );
-    }
-
-    else
-
-    if (Platform.isIOS) {
+    } else if (Platform.isIOS) {
       return UiKitView(
         key: key,
-
         viewType: 'flutter_rtmp_streamer_camera_view',
         onPlatformViewCreated: (id) {
           debugPrint("_onPlatformViewCreated $id");
@@ -74,7 +61,8 @@ class FlutterRtmpCameraView extends StatelessWidget {
       );
     }
 
-
-    return Center(child: Text("FlutterRtmpCamera doesn't support ${Platform.operatingSystem} yet."),);
+    return Center(
+      child: Text("FlutterRtmpCamera doesn't support ${Platform.operatingSystem} yet."),
+    );
   }
 }

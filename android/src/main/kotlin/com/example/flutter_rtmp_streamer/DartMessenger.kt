@@ -5,13 +5,11 @@
 
 package com.example.flutter_rtmp_streamer
 
-
 import android.os.Handler
 import android.os.Looper
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.EventSink
-
 
 //
 // This EventChannel is used to stream data from plugin to flutter.
@@ -24,11 +22,17 @@ class DartMessenger(messenger: BinaryMessenger, name: String) {
         Handler(Looper.getMainLooper())
     }
 
-    fun send(eventType: String, args: Map<String, String>) {
-        handler.post {_send(eventType, args)}
+    fun send(
+        eventType: String,
+        args: Map<String, String>,
+    ) {
+        handler.post { _send(eventType, args) }
     }
 
-    private fun _send(eventType: String, args: Map<String, String>) {
+    private fun _send(
+        eventType: String,
+        args: Map<String, String>,
+    ) {
         if (eventSink == null) {
             return
         }
@@ -39,17 +43,21 @@ class DartMessenger(messenger: BinaryMessenger, name: String) {
     }
 
     init {
-        assert(messenger != null);
+        assert(messenger != null)
         EventChannel(messenger, name)
-                .setStreamHandler(
-                        object : EventChannel.StreamHandler {
-                            override fun onListen(arguments: Any?, sink: EventSink) {
-                                eventSink = sink
-                            }
+            .setStreamHandler(
+                object : EventChannel.StreamHandler {
+                    override fun onListen(
+                        arguments: Any?,
+                        sink: EventSink,
+                    ) {
+                        eventSink = sink
+                    }
 
-                            override fun onCancel(arguments: Any?) {
-                                eventSink = null
-                            }
-                        })
+                    override fun onCancel(arguments: Any?) {
+                        eventSink = null
+                    }
+                },
+            )
     }
 }

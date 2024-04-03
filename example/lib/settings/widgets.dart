@@ -1,13 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rtmp_streamer/flutter_rtmp/controller.dart';
 import 'package:flutter_rtmp_streamer/flutter_rtmp/model.dart';
 
 import '../main.dart';
 
-
 class StreamingStateBuilder extends StatelessWidget {
-  const StreamingStateBuilder({Key? key, required this.streamer, required this.builder}) : super(key: key);
+  const StreamingStateBuilder({Key? key, required this.streamer, required this.builder})
+      : super(key: key);
   final FlutterRtmpStreamer streamer;
   final Function(BuildContext context, StreamingState streamingState) builder;
 
@@ -17,7 +16,6 @@ class StreamingStateBuilder extends StatelessWidget {
         stream: streamer.stateStream,
         initialData: streamer.state,
         builder: (context, streamStateSnap) {
-
           if (!streamStateSnap.hasData) {
             return const Loader();
           }
@@ -27,13 +25,7 @@ class StreamingStateBuilder extends StatelessWidget {
   }
 }
 
-
-
-
-
-
 class ListDrawer<T> extends StatelessWidget {
-
   final FlutterRtmpStreamer streamer;
   const ListDrawer({
     Key? key,
@@ -53,42 +45,46 @@ class ListDrawer<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       child: Scaffold(
-        appBar: AppBar(title: Text(title),),
+        appBar: AppBar(
+          title: Text(title),
+        ),
         body: StreamingStateBuilder(
             streamer: streamer,
             builder: (context, state) {
               return ListView(
-                children: list.map((item) =>
-                    InkWell(
-                      onTap: state.inSettings || (checkIsStreaming && state.isStreaming) ? null : () {
-                        Navigator.of(context).pop();
-                        if (onSelected!=null) {
-                          onSelected!(item);
-                        }
-                      },
-                      child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                            color: item == selectedItem ? ((checkIsStreaming && state.isStreaming) ? Colors.grey : Colors.lightBlueAccent) : const Color.fromRGBO(0, 0, 0, 0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB (16,8,0,8),
-                            child: Text(item.toString()),
-                          )
-                      ),
-                    )
-                ).toList(),
+                children: list
+                    .map((item) => InkWell(
+                          onTap: state.inSettings || (checkIsStreaming && state.isStreaming)
+                              ? null
+                              : () {
+                                  Navigator.of(context).pop();
+                                  if (onSelected != null) {
+                                    onSelected!(item);
+                                  }
+                                },
+                          child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              decoration: BoxDecoration(
+                                color: item == selectedItem
+                                    ? ((checkIsStreaming && state.isStreaming)
+                                        ? Colors.grey
+                                        : Colors.lightBlueAccent)
+                                    : const Color.fromRGBO(0, 0, 0, 0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+                                child: Text(item.toString()),
+                              )),
+                        ))
+                    .toList(),
               );
-            }
-        ),
+            }),
       ),
     );
   }
 }
-
 
 class FutureListDrawer<T> extends StatelessWidget {
   const FutureListDrawer({
@@ -111,21 +107,22 @@ class FutureListDrawer<T> extends StatelessWidget {
     return FutureBuilder<List<T>>(
         future: futureList,
         builder: (context, snapshot) {
-
-          if (snapshot.hasError){
+          if (snapshot.hasError) {
             return Drawer(
                 child: Scaffold(
-                    appBar: AppBar(title: Text(title),),
-                    body: MyErrorWidget( error: snapshot.error.toString() )
-                ));
+                    appBar: AppBar(
+                      title: Text(title),
+                    ),
+                    body: MyErrorWidget(error: snapshot.error.toString())));
           }
 
-          if (!snapshot.hasData){
+          if (!snapshot.hasData) {
             return Drawer(
                 child: Scaffold(
-                    appBar: AppBar(title: Text(title),),
-                    body: const Loader()
-                ));
+                    appBar: AppBar(
+                      title: Text(title),
+                    ),
+                    body: const Loader()));
           }
 
           return ListDrawer<T>(
@@ -135,7 +132,6 @@ class FutureListDrawer<T> extends StatelessWidget {
             selectedItem: selectedItem,
             onSelected: onSelected,
           );
-        }
-    );
+        });
   }
 }

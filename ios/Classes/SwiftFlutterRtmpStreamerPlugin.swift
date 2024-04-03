@@ -1,12 +1,11 @@
 import Flutter
 import UIKit
 
-
 class CameraViewFactory: NSObject, FlutterPlatformViewFactory {
-    private var _rtpService:RtpService
+    private var _rtpService: RtpService
 
-    init(registrar: FlutterPluginRegistrar, rtpService: RtpService) {
-        self._rtpService = rtpService
+    init(registrar _: FlutterPluginRegistrar, rtpService: RtpService) {
+        _rtpService = rtpService
         super.init()
     }
 
@@ -20,221 +19,169 @@ class CameraViewFactory: NSObject, FlutterPlatformViewFactory {
             viewIdentifier: viewId,
             arguments: args,
             rtpService: _rtpService
-           )
+        )
     }
 }
 
-
-
 public class SwiftFlutterRtmpStreamerPlugin: NSObject, FlutterPlugin {
-    
- 
-    private var _rtpService:RtpService
-    
-    
+    private var _rtpService: RtpService
+
     init(rtpService: RtpService) {
         logger.info("init")
         _rtpService = rtpService
 
         super.init()
     }
-    
-      
+
     public static func register(with registrar: FlutterPluginRegistrar) {
-
-        
-
         let channel = FlutterMethodChannel(name: "flutter_rtmp_streamer", binaryMessenger: registrar.messenger())
 
-          
         let instance = SwiftFlutterRtmpStreamerPlugin(rtpService: RtpService(dartMessenger: DartMessenger(messenger: registrar.messenger(), name: "flutter_rtmp_streamer/events")))
         registrar.addMethodCallDelegate(instance, channel: channel)
-        
-        let nativeViewFactory = CameraViewFactory( registrar: registrar, rtpService: instance._rtpService)
+
+        let nativeViewFactory = CameraViewFactory(registrar: registrar, rtpService: instance._rtpService)
         registrar.register(nativeViewFactory, withId: "flutter_rtmp_streamer_camera_view")
     }
-    
-  
-    
 
-    
-    
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-      
-      
-      
-      
-      switch call.method {
-       /*
-        *
-        *
-        */
+        switch call.method {
+        /*
+         *
+         *
+         */
         case "getPlatformVersion":
-          result("iOS " + UIDevice.current.systemVersion)
-          break;
-          
+            result("iOS " + UIDevice.current.systemVersion)
+
         /*
          *
          *
          */
         case "init":
-          
-          guard let args0 = call.arguments else {
-              result(FlutterError.init(code: call.method, message: "args is empty", details: nil))
-              return
-          }
-          
-          guard let args = args0 as? [String: Any] else {
-              result(FlutterError.init(code: call.method, message: "args is empty", details: nil))
-              return
-          }
-          
-          if let streamingSettings = args["streamingSettings"] as? String {
-                            
-              do {
-                  
-                
-                  _rtpService.setStreamingSettings( newValue: try JSONDecoder().decode(StreamingSettings.self, from: streamingSettings.data(using: .utf8)!))
-                
-                  result(true)
-                  
-                  _rtpService.sendCameraStatusToDart()
-                  
 
-              } catch {
-                  result(FlutterError.init(code: "init", message: "\(error)", details: nil))
-
-                  
-              }
-          } else {
-              result(FlutterError.init(code: "init", message: "initialParams empty", details: nil))
-          }
-
-          break;
-          
-          
-          /*
-           *
-           *
-           */
-          case "getResolutions":
-          
-              let resolutions = BackAndFrontResolutions(back: _rtpService.getSupportedResolutions(), front: _rtpService.getSupportedResolutions())
-              
-              do {
-                  result(String(decoding: try JSONEncoder().encode(resolutions), as: UTF8.self))
-              } catch {
-                  result(FlutterError.init(code: "getResolutions", message: "\(error)", details: nil))
-              }
-          break;
-          
-          
-          
-          /*
-           *
-           *
-           */
-          case "changeStreamingSettings":
-            
             guard let args0 = call.arguments else {
-                result(FlutterError.init(code: call.method, message: "args is empty", details: nil))
+                result(FlutterError(code: call.method, message: "args is empty", details: nil))
                 return
             }
-            
+
             guard let args = args0 as? [String: Any] else {
-                result(FlutterError.init(code: call.method, message: "args is empty", details: nil))
+                result(FlutterError(code: call.method, message: "args is empty", details: nil))
                 return
             }
-            
+
             if let streamingSettings = args["streamingSettings"] as? String {
-                              
                 do {
-                    
-                  
-                    _rtpService.setStreamingSettings( newValue: try JSONDecoder().decode(StreamingSettings.self, from: streamingSettings.data(using: .utf8)!))
-                  
+                    try _rtpService.setStreamingSettings(newValue: JSONDecoder().decode(StreamingSettings.self, from: streamingSettings.data(using: .utf8)!))
+
                     result(true)
-                    
+
                     _rtpService.sendCameraStatusToDart()
-                    
 
                 } catch {
-                    result(FlutterError.init(code: "changeStreamingSettings", message: "\(error)", details: nil))
-
-                    
+                    result(FlutterError(code: "init", message: "\(error)", details: nil))
                 }
             } else {
-                result(FlutterError.init(code: "changeStreamingSettings", message: "initialParams empty", details: nil))
+                result(FlutterError(code: "init", message: "initialParams empty", details: nil))
             }
 
-            break;
-         
-          /*
-           *
-           *
-           */
-          case "startStream":
-            
+        /*
+         *
+         *
+         */
+        case "getResolutions":
+
+            let resolutions = BackAndFrontResolutions(back: _rtpService.getSupportedResolutions(), front: _rtpService.getSupportedResolutions())
+
+            do {
+                try result(String(decoding: JSONEncoder().encode(resolutions), as: UTF8.self))
+            } catch {
+                result(FlutterError(code: "getResolutions", message: "\(error)", details: nil))
+            }
+
+        /*
+         *
+         *
+         */
+        case "changeStreamingSettings":
+
             guard let args0 = call.arguments else {
-                result(FlutterError.init(code: call.method, message: "args is empty", details: nil))
+                result(FlutterError(code: call.method, message: "args is empty", details: nil))
                 return
             }
-            
+
             guard let args = args0 as? [String: Any] else {
-                result(FlutterError.init(code: call.method, message: "args is empty", details: nil))
+                result(FlutterError(code: call.method, message: "args is empty", details: nil))
                 return
             }
-            
+
+            if let streamingSettings = args["streamingSettings"] as? String {
+                do {
+                    try _rtpService.setStreamingSettings(newValue: JSONDecoder().decode(StreamingSettings.self, from: streamingSettings.data(using: .utf8)!))
+
+                    result(true)
+
+                    _rtpService.sendCameraStatusToDart()
+
+                } catch {
+                    result(FlutterError(code: "changeStreamingSettings", message: "\(error)", details: nil))
+                }
+            } else {
+                result(FlutterError(code: "changeStreamingSettings", message: "initialParams empty", details: nil))
+            }
+
+        /*
+         *
+         *
+         */
+        case "startStream":
+
+            guard let args0 = call.arguments else {
+                result(FlutterError(code: call.method, message: "args is empty", details: nil))
+                return
+            }
+
+            guard let args = args0 as? [String: Any] else {
+                result(FlutterError(code: call.method, message: "args is empty", details: nil))
+                return
+            }
+
             if let uri = args["uri"] as? String,
                let streamName = args["streamName"] as? String
-          {
-                
-                let endpoint : String = "\(uri)/\(streamName)"
-                              
-                do {
+            {
+                let endpoint = "\(uri)/\(streamName)"
 
+                do {
                     _rtpService.startStreaming(uri: uri, streamName: streamName)
-                  
+
                     result(true)
-                    
+
                     _rtpService.sendCameraStatusToDart()
-                    
 
                 } catch {
-                    result(FlutterError.init(code: "startStream", message: "\(error)", details: nil))
+                    result(FlutterError(code: "startStream", message: "\(error)", details: nil))
                 }
             } else {
-                result(FlutterError.init(code: "startStream", message: "initialParams empty", details: nil))
+                result(FlutterError(code: "startStream", message: "initialParams empty", details: nil))
             }
 
-            break;
-          
-          /*
-           *
-           *
-           */
-          case "stopStream":
-          
-                            
-              do {
+        /*
+         *
+         *
+         */
+        case "stopStream":
 
-                  _rtpService.stopStreaming()
-                
-                  result(true)
-                  
-                  _rtpService.sendCameraStatusToDart()
-                  
+            do {
+                _rtpService.stopStreaming()
 
-              } catch {
-                  result(FlutterError.init(code: "stopStream", message: "\(error)", details: nil))
-              }
+                result(true)
 
+                _rtpService.sendCameraStatusToDart()
 
-            break;
+            } catch {
+                result(FlutterError(code: "stopStream", message: "\(error)", details: nil))
+            }
 
-      
         default:
-          result(FlutterMethodNotImplemented);
-      }
-  }
+            result(FlutterMethodNotImplemented)
+        }
+    }
 }

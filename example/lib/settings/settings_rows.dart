@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 class SettingsSwitch extends StatelessWidget {
-  const SettingsSwitch({
-    Key? key,
-    required this.iconData,
-    required this.title,
-    required this.disabled,
-    required this.value,
-    required this.onChanged
-  }) : super(key: key);
+  const SettingsSwitch(
+      {Key? key,
+      required this.iconData,
+      required this.title,
+      required this.disabled,
+      required this.value,
+      required this.onChanged})
+      : super(key: key);
 
   final IconData iconData;
   final String title;
@@ -20,7 +19,7 @@ class SettingsSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  SettingsRow(
+    return SettingsRow(
       left: Icon(iconData),
       title: Text(title),
       right: CupertinoSwitch(
@@ -49,16 +48,12 @@ class SettingsOption extends StatelessWidget {
   final bool disabled;
   final Function() onTap;
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
-    return  SettingsRow(
-      left: iconData!=null ? Icon(iconData) : null,
+    return SettingsRow(
+      left: iconData != null ? Icon(iconData) : null,
       title: Text(text),
-      rightTitle: rightText!=null ? Text("( $rightText )") : null,
+      rightTitle: rightText != null ? Text("( $rightText )") : null,
 
       onTap: disabled ? null : onTap,
       right: const Icon(Icons.arrow_right),
@@ -66,12 +61,9 @@ class SettingsOption extends StatelessWidget {
       // decoration: const BoxDecoration(
       //   color: Colors.blueGrey ,
       // ),
-
     );
   }
 }
-
-
 
 class SettingsLine extends StatelessWidget {
   const SettingsLine({Key? key, this.text}) : super(key: key);
@@ -80,15 +72,11 @@ class SettingsLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: text!=null ? const EdgeInsets.symmetric(vertical: 16, horizontal: 16) : null,
-        decoration: const BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: Colors.blue))),
-        child: Text(text ?? "")
-    );
+        padding: text != null ? const EdgeInsets.symmetric(vertical: 16, horizontal: 16) : null,
+        decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.blue))),
+        child: Text(text ?? ""));
   }
 }
-
 
 // [ left | title       rightTitle | right ]
 
@@ -102,7 +90,6 @@ class SettingsRow extends StatelessWidget {
   final Decoration? decoration;
   final bool _isActive;
 
-
   const SettingsRow({
     Key? key,
     this.left,
@@ -112,7 +99,8 @@ class SettingsRow extends StatelessWidget {
     this.onTap,
     this.decoration,
     bool isActive = false,
-  }) : _isActive = isActive || onTap!=null, super(key: key);
+  })  : _isActive = isActive || onTap != null,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -122,9 +110,13 @@ class SettingsRow extends StatelessWidget {
         decoration: decoration,
         padding: const EdgeInsets.all(16),
         child: IconTheme(
-          data: _isActive ? const IconThemeData(color: Colors.black) : const IconThemeData(color: Colors.black45),
+          data: _isActive
+              ? const IconThemeData(color: Colors.black)
+              : const IconThemeData(color: Colors.black45),
           child: DefaultTextStyle(
-            style: _isActive ? const TextStyle(color: Colors.black) : const TextStyle(color: Colors.black45),
+            style: _isActive
+                ? const TextStyle(color: Colors.black)
+                : const TextStyle(color: Colors.black45),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -139,12 +131,12 @@ class SettingsRow extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                Row(children: [
-                  rightTitle ?? const SizedBox.shrink(),
-                  right ?? const SizedBox.shrink(),
-                ],)
-
+                Row(
+                  children: [
+                    rightTitle ?? const SizedBox.shrink(),
+                    right ?? const SizedBox.shrink(),
+                  ],
+                )
               ],
             ),
           ),
@@ -152,6 +144,4 @@ class SettingsRow extends StatelessWidget {
       ),
     );
   }
-
 }
-

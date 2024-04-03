@@ -5,39 +5,34 @@
 //  Created by kuzalex on 5/10/22.
 //
 
-import Foundation
 import AVFoundation
+import Foundation
 
-import MetalKit
 import HaishinKit
-import VideoToolbox
 import Logboard
-
-
-
-
+import MetalKit
+import VideoToolbox
 
 class CameraView: NSObject, FlutterPlatformView {
     private var _view: CameraEmbedView
-    private var _rtpService:RtpService
-    
+    private var _rtpService: RtpService
+
     init(
-        frame: CGRect,
-        viewIdentifier viewId: Int64,
-        arguments args: Any?,
+        frame _: CGRect,
+        viewIdentifier _: Int64,
+        arguments _: Any?,
         rtpService: RtpService
     ) {
         _view = CameraEmbedView()
         _view.backgroundColor = UIColor.black
         _rtpService = rtpService
-        
-        _rtpService.startPreview(lfView: _view.glView!);
+
+        _rtpService.startPreview(lfView: _view.glView!)
         _rtpService.sendCameraStatusToDart()
 
-        
         super.init()
     }
-    
+
     deinit {
         _rtpService.stopPreview()
         _rtpService.sendCameraStatusToDart()
@@ -48,29 +43,26 @@ class CameraView: NSObject, FlutterPlatformView {
     }
 }
 
-class CameraEmbedView : UIView {
-    
-    private var _glView: MTHKView?          // _x -> backingX
-    var glView: MTHKView? {
-        get { return _glView }
-    }
+class CameraEmbedView: UIView {
+    private var _glView: MTHKView? // _x -> backingX
+    var glView: MTHKView? { return _glView }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         _glView = MTHKView(frame: frame)
         _glView!.videoGravity = AVLayerVideoGravity.resizeAspect
-        
-        self.addSubview(_glView!)
+
+        addSubview(_glView!)
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+
     override func layoutSubviews() {
-        print("current frame: \(self.frame)")
-        if (_glView != nil){
-            _glView!.frame = self.frame
+        print("current frame: \(frame)")
+        if _glView != nil {
+            _glView!.frame = frame
         }
         super.layoutSubviews()
     }

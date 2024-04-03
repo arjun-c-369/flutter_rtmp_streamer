@@ -7,29 +7,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock/wakelock.dart';
 
-
 import 'model.dart';
 
 mixin WakeLock {
-
   bool _wakeLockEnabled = false;
 
-  toggle(bool enable){
-    if (enable != _wakeLockEnabled){
+  toggle(bool enable) {
+    if (enable != _wakeLockEnabled) {
       Wakelock.toggle(enable: enable);
-      _wakeLockEnabled = enable ;
+      _wakeLockEnabled = enable;
     }
   }
-
 }
 
-class FlutterRtmpStreamer with WakeLock  {
+class FlutterRtmpStreamer with WakeLock {
   static const MethodChannel _channel = MethodChannel('flutter_rtmp_streamer');
 
   /// native -> flutter channel
   ///
-  static const EventChannel _inputChannel =
-      EventChannel('flutter_rtmp_streamer/events');
+  static const EventChannel _inputChannel = EventChannel('flutter_rtmp_streamer/events');
   static final Stream _events = _inputChannel.receiveBroadcastStream();
 
   StreamingState _state;
@@ -48,19 +44,16 @@ class FlutterRtmpStreamer with WakeLock  {
   ///
   StreamController<StreamingNotification>? __nofiticationController;
   StreamController<StreamingNotification> get _nofiticationController {
-    return __nofiticationController ??=
-        StreamController<StreamingNotification>.broadcast();
+    return __nofiticationController ??= StreamController<StreamingNotification>.broadcast();
   }
 
   /// The current state stream.
   Stream<StreamingState> get stateStream => _stateController.stream;
 
   /// Notifications from streaming module
-  Stream<StreamingNotification> get notificationStream =>
-      _nofiticationController.stream;
+  Stream<StreamingNotification> get notificationStream => _nofiticationController.stream;
 
   bool _initialized = false;
-
 
   _changeState(StreamingState newState) {
     _state = newState;
@@ -73,29 +66,23 @@ class FlutterRtmpStreamer with WakeLock  {
   }
 
   FlutterRtmpStreamer._() : _state = StreamingState.empty {
-
     if (!Platform.isIOS) {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]);
     }
 
-
-
-
     _events.listen((event) {
       debugPrint('$event');
 
       switch (event['eventType']) {
-
         ///
         ///
         ///
         case "StreamingState":
           {
-            _changeState(
-                StreamingState.fromJson(jsonDecode(event['streamState']))
-                    .copyWith(inSettings: state.inSettings));
+            _changeState(StreamingState.fromJson(jsonDecode(event['streamState']))
+                .copyWith(inSettings: state.inSettings));
           }
           break;
 
@@ -104,8 +91,7 @@ class FlutterRtmpStreamer with WakeLock  {
         ///
         case "Notification":
           {
-            final notification =
-                StreamingNotification(description: event['description']);
+            final notification = StreamingNotification(description: event['description']);
             if (!_nofiticationController.isClosed) {
               _nofiticationController.add(notification);
             }
@@ -117,9 +103,6 @@ class FlutterRtmpStreamer with WakeLock  {
       }
     });
   }
-
-
-
 
   stopStream() async {
     if (!_initialized) {
@@ -166,8 +149,7 @@ class FlutterRtmpStreamer with WakeLock  {
     }
   }
 
-  static Future<FlutterRtmpStreamer> init(
-      StreamingSettings streamingSettings) async {
+  static Future<FlutterRtmpStreamer> init(StreamingSettings streamingSettings) async {
     try {
       if (!(await Permission.microphone.request().isGranted)) {
         throw 'We need microphone permission to stream';
@@ -178,8 +160,8 @@ class FlutterRtmpStreamer with WakeLock  {
       }
 
       final instance = FlutterRtmpStreamer._();
-      await _channel.invokeMethod('init',
-          {'streamingSettings': jsonEncode(streamingSettings.toJson())});
+      await _channel
+          .invokeMethod('init', {'streamingSettings': jsonEncode(streamingSettings.toJson())});
       await instance.stateStream.first;
 
       instance._initialized = true;
@@ -217,8 +199,4 @@ class FlutterRtmpStreamer with WakeLock  {
     final String? version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
-
-
-
-
 }

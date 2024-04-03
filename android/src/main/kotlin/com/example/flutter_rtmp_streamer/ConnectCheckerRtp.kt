@@ -23,84 +23,83 @@ import com.pedro.rtsp.utils.ConnectCheckerRtsp
  * (Only working in kotlin)
  * Mix both connect interfaces to support RTMP and RTSP in service with same code.
  */
-interface ConnectCheckerRtp: ConnectCheckerRtmp, ConnectCheckerRtsp {
+interface ConnectCheckerRtp : ConnectCheckerRtmp, ConnectCheckerRtsp {
+    /**
+     * Commons
+     */
+    fun onConnectionStartedRtp(rtpUrl: String)
 
-  /**
-   * Commons
-   */
-  fun onConnectionStartedRtp(rtpUrl: String)
+    fun onConnectionSuccessRtp()
 
-  fun onConnectionSuccessRtp()
+    fun onConnectionFailedRtp(reason: String)
 
-  fun onConnectionFailedRtp(reason: String)
+    fun onNewBitrateRtp(bitrate: Long)
 
-  fun onNewBitrateRtp(bitrate: Long)
+    fun onDisconnectRtp()
 
-  fun onDisconnectRtp()
+    fun onAuthErrorRtp()
 
-  fun onAuthErrorRtp()
+    fun onAuthSuccessRtp()
 
-  fun onAuthSuccessRtp()
+    /**
+     * RTMP
+     */
+    override fun onConnectionStartedRtmp(rtmpUrl: String) {
+        onConnectionStartedRtp(rtmpUrl)
+    }
 
-  /**
-   * RTMP
-   */
-  override fun onConnectionStartedRtmp(rtmpUrl: String) {
-    onConnectionStartedRtp(rtmpUrl)
-  }
+    override fun onConnectionSuccessRtmp() {
+        onConnectionSuccessRtp()
+    }
 
-  override fun onConnectionSuccessRtmp() {
-    onConnectionSuccessRtp()
-  }
+    override fun onConnectionFailedRtmp(reason: String) {
+        onConnectionFailedRtp(reason)
+    }
 
-  override fun onConnectionFailedRtmp(reason: String) {
-    onConnectionFailedRtp(reason)
-  }
+    override fun onNewBitrateRtmp(bitrate: Long) {
+        onNewBitrateRtp(bitrate)
+    }
 
-  override fun onNewBitrateRtmp(bitrate: Long) {
-    onNewBitrateRtp(bitrate)
-  }
+    override fun onDisconnectRtmp() {
+        onDisconnectRtp()
+    }
 
-  override fun onDisconnectRtmp() {
-    onDisconnectRtp()
-  }
+    override fun onAuthErrorRtmp() {
+        onAuthErrorRtp()
+    }
 
-  override fun onAuthErrorRtmp() {
-    onAuthErrorRtp()
-  }
+    override fun onAuthSuccessRtmp() {
+        onAuthSuccessRtp()
+    }
 
-  override fun onAuthSuccessRtmp() {
-    onAuthSuccessRtp()
-  }
+    /**
+     * RTSP
+     */
+    override fun onConnectionStartedRtsp(rtspUrl: String) {
+        onConnectionStartedRtp(rtspUrl)
+    }
 
-  /**
-   * RTSP
-   */
-  override fun onConnectionStartedRtsp(rtspUrl: String) {
-    onConnectionStartedRtp(rtspUrl)
-  }
+    override fun onConnectionSuccessRtsp() {
+        onConnectionSuccessRtp()
+    }
 
-  override fun onConnectionSuccessRtsp() {
-    onConnectionSuccessRtp()
-  }
+    override fun onConnectionFailedRtsp(reason: String) {
+        onConnectionFailedRtp(reason)
+    }
 
-  override fun onConnectionFailedRtsp(reason: String) {
-    onConnectionFailedRtp(reason)
-  }
+    override fun onNewBitrateRtsp(bitrate: Long) {
+        onNewBitrateRtp(bitrate)
+    }
 
-  override fun onNewBitrateRtsp(bitrate: Long) {
-    onNewBitrateRtp(bitrate)
-  }
+    override fun onDisconnectRtsp() {
+        onDisconnectRtp()
+    }
 
-  override fun onDisconnectRtsp() {
-    onDisconnectRtp()
-  }
+    override fun onAuthErrorRtsp() {
+        onAuthErrorRtp()
+    }
 
-  override fun onAuthErrorRtsp() {
-    onAuthErrorRtp()
-  }
-
-  override fun onAuthSuccessRtsp() {
-    onAuthSuccessRtp()
-  }
+    override fun onAuthSuccessRtsp() {
+        onAuthSuccessRtp()
+    }
 }
