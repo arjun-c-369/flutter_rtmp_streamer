@@ -38,7 +38,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_rtmp_streamer: 98b51ad838902da16deb0832771263ca1d6d0e9a
   HaishinKit: abf62d8ed7fc380c97a96077a0e37c7f79e69e08
   Logboard: 0ab6bbd984ed032b3f0b615cef06779a73445c80
@@ -46,6 +46,6 @@ SPEC CHECKSUMS:
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
-PODFILE CHECKSUM: 7e8a1c960c5255f589d779033523f0da0aa6d166
+PODFILE CHECKSUM: 437cb550cdf12424a2354ec44080d2c0abf010da
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.13.0
