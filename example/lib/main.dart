@@ -47,7 +47,15 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CameraSettingsDrawer(streamer: widget.streamer),
-      appBar: _AppBar(),
+      appBar: AppBar(
+        leading: ElevatedButton(
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+          child: const Icon(Icons.menu),
+        ),
+        title: const Text("FlutterRtmpStreamer Basic sample"),
+      ),
       body: Stack(
         children: [
           Container(
@@ -90,27 +98,6 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-}
-
-class _AppBar extends AppBar {
-  _AppBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-        leading: ElevatedButton(
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
-          },
-          child: const Icon(
-            Icons.menu,
-          ),
-        ),
-        title: const Text("FlutterRtmpStreamer Basic sample"));
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(50);
 }
 
 class LeftControlBox extends StatelessWidget {
@@ -190,7 +177,7 @@ class NotificationListener extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             WidgetsBinding.instance
-                ?.addPostFrameCallback((_) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                .addPostFrameCallback((_) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(snapshot.data!.description),
                     )));
           }

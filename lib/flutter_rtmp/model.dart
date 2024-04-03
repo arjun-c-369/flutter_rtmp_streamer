@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'dart:collection';
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -22,9 +21,9 @@ class Resolution extends Equatable {
 
   @override
   List<Object> get props => [
-    width,
-    height,
-  ];
+        width,
+        height,
+      ];
 
   @override
   String toString() => "$width × $height";
@@ -37,10 +36,8 @@ enum StreamingCameraFacing {
   back,
 }
 
-
 @JsonSerializable()
 class StreamingState extends Equatable {
-
   final bool isStreaming;
   final bool isOnPreview;
   final bool isAudioMuted;
@@ -51,15 +48,13 @@ class StreamingState extends Equatable {
   final int cameraOrientation;
 
   double get aspectRatio {
-    if (cameraOrientation == 0 || cameraOrientation == 180){
+    if (cameraOrientation == 0 || cameraOrientation == 180) {
       if (resolution.height != 0) {
-        return resolution
-            .width / resolution.height;
+        return resolution.width / resolution.height;
       }
     } else {
       if (resolution.width != 0) {
-        return resolution
-            .height / resolution.width;
+        return resolution.height / resolution.width;
       }
     }
     return 1.0;
@@ -70,7 +65,7 @@ class StreamingState extends Equatable {
   @JsonKey(ignore: true)
   final bool inSettings;
 
-  const StreamingState( {
+  const StreamingState({
     required this.isStreaming,
     required this.isOnPreview,
     required this.isAudioMuted,
@@ -83,15 +78,15 @@ class StreamingState extends Equatable {
   });
 
   static const empty = StreamingState(
-      isStreaming:false,
-      isOnPreview: false,
-      isAudioMuted: false,
-      isRtmpConnected: false,
-      streamResolution: Resolution(0,0),
-      resolution: Resolution(0,0),
-      cameraOrientation: 0,
-      inSettings: false,
-      streamingSettings: StreamingSettings.initial,
+    isStreaming: false,
+    isOnPreview: false,
+    isAudioMuted: false,
+    isRtmpConnected: false,
+    streamResolution: Resolution(0, 0),
+    resolution: Resolution(0, 0),
+    cameraOrientation: 0,
+    inSettings: false,
+    streamingSettings: StreamingSettings.initial,
   );
 
   bool get isEmpty => this == empty;
@@ -99,7 +94,6 @@ class StreamingState extends Equatable {
 
   factory StreamingState.fromJson(Map<String, dynamic> json) => _$StreamingStateFromJson(json);
   Map<String, dynamic> toJson() => _$StreamingStateToJson(this);
-
 
   StreamingState copyWith({
     bool? inSettings,
@@ -119,20 +113,17 @@ class StreamingState extends Equatable {
 
   @override
   List<Object> get props => [
-    isStreaming,
-    isOnPreview,
-    isAudioMuted,
-    isRtmpConnected,
-
-    streamResolution,
-    resolution,
-    cameraOrientation,
-    inSettings,
-
-    streamingSettings,
-  ];
+        isStreaming,
+        isOnPreview,
+        isAudioMuted,
+        isRtmpConnected,
+        streamResolution,
+        resolution,
+        cameraOrientation,
+        inSettings,
+        streamingSettings,
+      ];
 }
-
 
 ///
 ///
@@ -155,15 +146,11 @@ class StreamingSettings extends Equatable {
 
   bool get serviceInForeground => !serviceInBackground;
 
-
-
   static const initial = StreamingSettings(
     serviceInBackground: false,
-    cameraFacing : StreamingCameraFacing.back,
+    cameraFacing: StreamingCameraFacing.back,
     resolution: Resolution(1280, 720),
-
-
-    videoFps:30,
+    videoFps: 30,
     videoBitrate: 1024 * 1024,
     h264profile: "main",
     stabilizationMode: "off",
@@ -187,10 +174,9 @@ class StreamingSettings extends Equatable {
     required this.muteAudio,
   });
 
-
-  factory StreamingSettings.fromJson(Map<String, dynamic> json) => _$StreamingSettingsFromJson(json);
+  factory StreamingSettings.fromJson(Map<String, dynamic> json) =>
+      _$StreamingSettingsFromJson(json);
   Map<String, dynamic> toJson() => _$StreamingSettingsToJson(this);
-
 
   StreamingSettings copyWith({
     bool? serviceInBackground,
@@ -217,29 +203,24 @@ class StreamingSettings extends Equatable {
       audioSampleRate: audioSampleRate ?? this.audioSampleRate,
       audioChannelCount: audioChannelCount ?? this.audioChannelCount,
       muteAudio: muteAudio ?? this.muteAudio,
-
     );
   }
 
   @override
   List<Object> get props => [
-    serviceInBackground,
-    cameraFacing,
-    resolution,
-    videoFps,
-    videoBitrate,
-    h264profile,
-    stabilizationMode,
-    audioBitrate,
-    audioSampleRate,
-    audioChannelCount,
-    muteAudio,
-
-  ];
-
+        serviceInBackground,
+        cameraFacing,
+        resolution,
+        videoFps,
+        videoBitrate,
+        h264profile,
+        stabilizationMode,
+        audioBitrate,
+        audioSampleRate,
+        audioChannelCount,
+        muteAudio,
+      ];
 }
-
-
 
 ///
 ///
@@ -253,29 +234,23 @@ class BackAndFrontResolutions extends Equatable {
     required this.front,
   });
 
-
-  factory BackAndFrontResolutions.fromJson(Map<String, dynamic> json) => _$BackAndFrontResolutionsFromJson(json);
+  factory BackAndFrontResolutions.fromJson(Map<String, dynamic> json) =>
+      _$BackAndFrontResolutionsFromJson(json);
   Map<String, dynamic> toJson() => _$BackAndFrontResolutionsToJson(this);
 
   @override
   List<Object> get props => [
-    back,
-    front,
-  ];
-
+        back,
+        front,
+      ];
 }
 
-
-
 class StreamingNotification extends Equatable {
-
   final String description;
 
-
-  const StreamingNotification( {
+  const StreamingNotification({
     required this.description,
   });
-
 
   StreamingNotification copyWith({
     String? description,
@@ -287,6 +262,6 @@ class StreamingNotification extends Equatable {
 
   @override
   List<Object> get props => [
-    description,
-  ];
+        description,
+      ];
 }

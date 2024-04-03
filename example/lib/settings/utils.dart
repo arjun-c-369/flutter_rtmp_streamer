@@ -1,6 +1,4 @@
-
-
-class Tuple<A,B> {
+class Tuple<A, B> {
   final A value;
   final B name;
 
@@ -11,8 +9,7 @@ class Tuple<A,B> {
   // compare by value
   @override
   bool operator ==(Object other) {
-
-    if (other is Tuple<A,B>) {
+    if (other is Tuple<A, B>) {
       return (other.value == value);
     }
     return false;
@@ -28,9 +25,3 @@ class NamedValue<V> extends Tuple<V, String> {
   @override
   String toString() => name;
 }
-
-
-
-
-
-
